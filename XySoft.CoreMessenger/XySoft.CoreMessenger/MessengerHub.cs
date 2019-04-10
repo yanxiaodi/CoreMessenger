@@ -53,7 +53,7 @@ namespace XySoft.CoreMessenger
             System.Diagnostics.Debug.WriteLine($"Adding subscription {subscription.Id} for {typeof(TMessage).Name}");
 #endif
             messageSubscriptions[subscription.Id] = subscription;
-            //PublishSubscriberChangeMessage<TMessage>(messageSubscriptions);
+            PublishSubscriberChangedMessage<TMessage>(messageSubscriptions);
             return new SubscriptionToken(subscription.Id, () => UnsubscribeInternal<TMessage>(subscription.Id));
         }
         #endregion
@@ -88,8 +88,7 @@ namespace XySoft.CoreMessenger
 #endif
                 }
             }
-
-            //PublishSubscriberChangeMessage<TMessage>(messageSubscriptions);
+            PublishSubscriberChangedMessage<TMessage>(messageSubscriptions);
         }
         #endregion
 
@@ -133,7 +132,7 @@ namespace XySoft.CoreMessenger
                 return;
             }
 
-            List<Guid> failedSubscriptions = new List<Guid>();
+            List<Guid> deadSubscriptionIds = new List<Guid>();
             toPublish.ForEach(subscription =>
             {
 #if DEBUG
@@ -142,32 +141,53 @@ namespace XySoft.CoreMessenger
                 var result = subscription.Invoke(message);
                 if (!result)
                 {
-                    failedSubscriptions.Add(subscription.Id);
+                    deadSubscriptionIds.Add(subscription.Id);
                 }
             });
-            if(failedSubscriptions.Any())
+            if(deadSubscriptionIds.Any())
             {
-                PurgeSubscription(messageType, failedSubscriptions);
+                PurgeDeadSubscriptions(messageType, deadSubscriptionIds);
             }
         }
 
-        private void PurgeSubscription(Type messageType, List<Guid> failedSubscriptions)
+        private void PurgeDeadSubscriptions(Type messageType, List<Guid> deadSubscriptionIds)
         {
             ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions = null;
             if (_subscriptions.TryGetValue(messageType, out messageSubscriptions))
             {
-                failedSubscriptions.ForEach(subscriptionId =>
+                deadSubscriptionIds.ForEach(subscriptionId =>
                 {
+                    if (messageSubscriptions.ContainsKey(subscriptionId))
+                    {
 #if DEBUG
-                    System.Diagnostics.Debug.WriteLine($"Subscription {subscriptionId} is dead. Removing subscription {subscriptionId}");
+                        System.Diagnostics.Debug.WriteLine($"Subscription {subscriptionId} is dead. Removing subscription {subscriptionId}");
 #endif
-                    messageSubscriptions.TryRemove(subscriptionId, out var value);
+                        var result = messageSubscriptions.TryRemove(subscriptionId, out BaseSubscription value);
+#if DEBUG
+                        if (result)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"Subscription {subscriptionId} Removed");
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine($"Failed to remove subscription {subscriptionId}");
+                        }
+                    }
+#endif
                 });
+
             }
-            PublishSubscriberChangeMessage(messageType, messageSubscriptions);
+            PublishSubscriberChangedMessage(messageType, messageSubscriptions);
         }
 
-        private void PublishSubscriberChangeMessage(Type messageType, ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions)
+        private void PublishSubscriberChangedMessage<TMessage>(ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions) 
+            where TMessage : Message
+        {
+
+            PublishSubscriberChangedMessage(typeof(TMessage), messageSubscriptions);
+        }
+
+        private void PublishSubscriberChangedMessage(Type messageType, ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions)
         {
             var newCount = messageSubscriptions?.Count ?? 0;
             Publish(new SubscriberChangedMessage(this, messageType, newCount));
