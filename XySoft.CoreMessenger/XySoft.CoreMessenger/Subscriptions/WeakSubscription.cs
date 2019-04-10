@@ -25,6 +25,9 @@ namespace XySoft.CoreMessenger.Subscriptions
             }
             if (!_weakReference.IsAlive)
             {
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine($"Subscription {Id} for {typeof(TMessage)} has been reclaimed by garbage collection");
+#endif
                 return false;
             }
             var action = _weakReference.Target as Action<TMessage>;
