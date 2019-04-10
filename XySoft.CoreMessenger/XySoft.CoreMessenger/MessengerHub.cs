@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using XySoft.CoreMessenger.Dispatchers;
 using XySoft.CoreMessenger.Subscriptions;
@@ -90,6 +91,88 @@ namespace XySoft.CoreMessenger
 
             //PublishSubscriberChangeMessage<TMessage>(messageSubscriptions);
         }
+        #endregion
+
+        #region Publish
+        public void Publish<TMessage>(TMessage message) where TMessage : Message
+        {
+            if (typeof(TMessage) == typeof(Message))
+            {
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine("It is not recommend to use a non-specific generic class here. Please create a new class inherited from the Message class.");
+#endif
+            }
+            if (message == null)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
+            List<BaseSubscription> toPublish = null;
+            Type messageType = message.GetType();
+
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine($"Found {_subscriptions.Count} subscriptions of all types");
+            foreach (var t in _subscriptions.Keys)
+            {
+                System.Diagnostics.Debug.WriteLine($"Found  subscriptions for {t.Name}");
+            }
+#endif
+            ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions = null;
+            if (_subscriptions.TryGetValue(messageType, out messageSubscriptions))
+            {
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine($"Found {messageSubscriptions.Values.Count} messages of type {typeof(TMessage).Name}");
+#endif
+                toPublish = messageSubscriptions.Values.OrderByDescending(x => x.Priority).ToList();
+            }
+
+            if (toPublish == null || toPublish.Count == 0)
+            {
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine($"Nothing registered for messages of type {messageType.Name}");
+#endif
+                return;
+            }
+
+            List<Guid> failedSubscriptions = new List<Guid>();
+            toPublish.ForEach(subscription =>
+            {
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine($"Starting to publish messages of type {messageType.Name}");
+#endif
+                var result = subscription.Invoke(message);
+                if (!result)
+                {
+                    failedSubscriptions.Add(subscription.Id);
+                }
+            });
+            if(failedSubscriptions.Any())
+            {
+                PurgeSubscription(messageType, failedSubscriptions);
+            }
+        }
+
+        private void PurgeSubscription(Type messageType, List<Guid> failedSubscriptions)
+        {
+            ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions = null;
+            if (_subscriptions.TryGetValue(messageType, out messageSubscriptions))
+            {
+                failedSubscriptions.ForEach(subscriptionId =>
+                {
+#if DEBUG
+                    System.Diagnostics.Debug.WriteLine($"Subscription {subscriptionId} is dead. Removing subscription {subscriptionId}");
+#endif
+                    messageSubscriptions.TryRemove(subscriptionId, out var value);
+                });
+            }
+            PublishSubscriberChangeMessage(messageType, messageSubscriptions);
+        }
+
+        private void PublishSubscriberChangeMessage(Type messageType, ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions)
+        {
+            var newCount = messageSubscriptions?.Count ?? 0;
+            Publish(new SubscriberChangedMessage(this, messageType, newCount));
+        }
+
         #endregion
 
         #region Private methods
