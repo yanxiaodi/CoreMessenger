@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using XySoft.CoreMessenger.Dispatchers;
 
 namespace XySoft.CoreMessenger.Subscriptions
@@ -10,19 +11,19 @@ namespace XySoft.CoreMessenger.Subscriptions
         public Guid Id { get; private set; }
         public SubscriptionPriority Priority { get; private set; }
         public string Tag { get; private set; }
-        public abstract bool Invoke(object message);
-        private readonly IDispatcher _dispatcher;
-        protected BaseSubscription(IDispatcher dispatcher, SubscriptionPriority priority, string tag)
+        public abstract Task<bool> Invoke(object message);
+        private readonly Dispatcher _dispatcher;
+        protected BaseSubscription(SubscriptionPriority priority, string tag)
         {
-            _dispatcher = dispatcher;
+            _dispatcher = new Dispatcher();
             Id = Guid.NewGuid();
             Priority = priority;
             Tag = tag;
         }
 
-        protected void Run(Action action)
+        protected async Task Run(Action action)
         {
-            _dispatcher.Invoke(action);
+            await _dispatcher.Invoke(action);
         }
 
 

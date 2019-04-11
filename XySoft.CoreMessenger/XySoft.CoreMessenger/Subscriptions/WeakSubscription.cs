@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using XySoft.CoreMessenger.Dispatchers;
 
 namespace XySoft.CoreMessenger.Subscriptions
@@ -9,14 +10,14 @@ namespace XySoft.CoreMessenger.Subscriptions
     {
         private readonly WeakReference<Action<TMessage>> _weakReference;
 
-        public WeakSubscription(IDispatcher dispatcher, Action<TMessage> action,
-            SubscriptionPriority priority, string tag) : base(dispatcher, priority, tag)
+        public WeakSubscription(Action<TMessage> action,
+            SubscriptionPriority priority, string tag) : base(priority, tag)
         {
             _weakReference = new WeakReference<Action<TMessage>>(action);
             action = null;
         }
 
-        public override bool Invoke(object message)
+        public override async Task<bool> Invoke(object message)
         {
             var typedMessage = message as TMessage;
             if (typedMessage == null)
@@ -30,7 +31,7 @@ namespace XySoft.CoreMessenger.Subscriptions
 #endif
                 return false;
             }
-            Run(() => action?.Invoke(typedMessage));
+            await Run(() => action?.Invoke(typedMessage));
             return true;
         }
     }

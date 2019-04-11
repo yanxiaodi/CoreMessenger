@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using XySoft.CoreMessenger.Dispatchers;
 using XySoft.CoreMessenger.Subscriptions;
 
@@ -28,7 +29,7 @@ namespace XySoft.CoreMessenger
             new ConcurrentDictionary<Type, ConcurrentDictionary<Guid, BaseSubscription>>();
 
         #region Subscribe
-        public SubscriptionToken Subscribe<TMessage>(Action<TMessage> action, ThreadMode threadMode = ThreadMode.Background,
+        public SubscriptionToken Subscribe<TMessage>(Action<TMessage> action,
             ReferenceType referenceType = ReferenceType.Weak,
             SubscriptionPriority priority = SubscriptionPriority.Normal, string tag = null) where TMessage : Message
         {
@@ -36,8 +37,7 @@ namespace XySoft.CoreMessenger
             {
                 throw new ArgumentNullException(nameof(action));
             }
-            IDispatcher dispatcher = BuildDispatcher(threadMode);
-            BaseSubscription subscription = BuildSubscription(action, dispatcher, referenceType, priority, tag);
+            BaseSubscription subscription = BuildSubscription(action, referenceType, priority, tag);
             return SubscribeInternal(action, subscription);
         }
 
@@ -54,18 +54,18 @@ namespace XySoft.CoreMessenger
             Debug.WriteLine($"Adding subscription {subscription.Id} for {typeof(TMessage).Name}");
 #endif
             messageSubscriptions[subscription.Id] = subscription;
-            PublishSubscriberChangedMessage<TMessage>(messageSubscriptions);
-            return new SubscriptionToken(subscription.Id, () => UnsubscribeInternal<TMessage>(subscription.Id));
+            Task.Run(async() => await PublishSubscriberChangedMessage<TMessage>(messageSubscriptions));
+            return new SubscriptionToken(subscription.Id, async() => await UnsubscribeInternal<TMessage>(subscription.Id));
         }
         #endregion
 
         #region Unsubscribe
-        public void Unsubscribe<TMessage>(SubscriptionToken subscriptionToken) where TMessage : Message
+        public async Task Unsubscribe<TMessage>(SubscriptionToken subscriptionToken) where TMessage : Message
         {
-            UnsubscribeInternal<TMessage>(subscriptionToken.Id);
+            await UnsubscribeInternal<TMessage>(subscriptionToken.Id);
         }
 
-        private void UnsubscribeInternal<TMessage>(Guid subscriptionId) where TMessage : Message
+        private async Task UnsubscribeInternal<TMessage>(Guid subscriptionId) where TMessage : Message
         {
             ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions;
 
@@ -89,12 +89,12 @@ namespace XySoft.CoreMessenger
 #endif
                 }
             }
-            PublishSubscriberChangedMessage<TMessage>(messageSubscriptions);
+            await PublishSubscriberChangedMessage<TMessage>(messageSubscriptions);
         }
         #endregion
 
         #region Publish
-        public void Publish<TMessage>(TMessage message) where TMessage : Message
+        public async Task Publish<TMessage>(TMessage message) where TMessage : Message
         {
             if (typeof(TMessage) == typeof(Message))
             {
@@ -134,24 +134,25 @@ namespace XySoft.CoreMessenger
             }
 
             List<Guid> deadSubscriptionIds = new List<Guid>();
-            toPublish.ForEach(subscription =>
+            foreach (var subscription in toPublish)
             {
 #if DEBUG
                 Debug.WriteLine($"Starting to publish messages of type {messageType.Name}");
 #endif
-                var result = subscription.Invoke(message);
+                var result = await subscription.Invoke(message);
                 if (!result)
                 {
                     deadSubscriptionIds.Add(subscription.Id);
                 }
-            });
+            }
+            
             if(deadSubscriptionIds.Any())
             {
-                PurgeDeadSubscriptions(messageType, deadSubscriptionIds);
+                await PurgeDeadSubscriptions(messageType, deadSubscriptionIds);
             }
         }
 
-        private void PurgeDeadSubscriptions(Type messageType, List<Guid> deadSubscriptionIds)
+        private async Task PurgeDeadSubscriptions(Type messageType, List<Guid> deadSubscriptionIds)
         {
             ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions = null;
             if (_subscriptions.TryGetValue(messageType, out messageSubscriptions))
@@ -178,20 +179,20 @@ namespace XySoft.CoreMessenger
                 });
 
             }
-            PublishSubscriberChangedMessage(messageType, messageSubscriptions);
+            await PublishSubscriberChangedMessage(messageType, messageSubscriptions);
         }
 
-        private void PublishSubscriberChangedMessage<TMessage>(ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions) 
+        private async Task PublishSubscriberChangedMessage<TMessage>(ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions) 
             where TMessage : Message
         {
 
-            PublishSubscriberChangedMessage(typeof(TMessage), messageSubscriptions);
+            await PublishSubscriberChangedMessage(typeof(TMessage), messageSubscriptions);
         }
 
-        private void PublishSubscriberChangedMessage(Type messageType, ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions)
+        private async Task PublishSubscriberChangedMessage(Type messageType, ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions)
         {
             var newCount = messageSubscriptions?.Count ?? 0;
-            Publish(new SubscriberChangedMessage(this, messageType, newCount));
+            await Publish(new SubscriberChangedMessage(this, messageType, newCount));
         }
 
         #endregion
@@ -211,16 +212,16 @@ namespace XySoft.CoreMessenger
         }
 
         private BaseSubscription BuildSubscription<TMessage>(Action<TMessage> action, 
-            IDispatcher actionRunner, ReferenceType referenceType, 
+            ReferenceType referenceType, 
             SubscriptionPriority priority, string tag) 
             where TMessage : Message
         {
             switch (referenceType)
             {
                 case ReferenceType.Strong:
-                    return new StrongSubscription<TMessage>(actionRunner, action, priority, tag);
+                    return new StrongSubscription<TMessage>(action, priority, tag);
                 case ReferenceType.Weak:
-                    return new WeakSubscription<TMessage>(actionRunner, action, priority, tag);
+                    return new WeakSubscription<TMessage>(action, priority, tag);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(referenceType), "reference type unexpected " + referenceType);
             }

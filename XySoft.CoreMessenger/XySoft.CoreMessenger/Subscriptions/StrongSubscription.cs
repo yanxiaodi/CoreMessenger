@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using XySoft.CoreMessenger.Dispatchers;
 
 namespace XySoft.CoreMessenger.Subscriptions
@@ -9,19 +10,19 @@ namespace XySoft.CoreMessenger.Subscriptions
     {
         private readonly Action<TMessage> _action;
 
-        public StrongSubscription(IDispatcher dispatcher, Action<TMessage> action,
-            SubscriptionPriority priority, string tag): base(dispatcher, priority, tag)
+        public StrongSubscription(Action<TMessage> action,
+            SubscriptionPriority priority, string tag): base(priority, tag)
         {
             _action = action;
         }
-        public override bool Invoke(object message)
+        public override async Task<bool> Invoke(object message)
         {
             var typedMessage = message as TMessage;
             if (typedMessage == null)
             {
                 throw new Exception($"Unexpected message {message.ToString()}");
             }
-            Run(() => _action?.Invoke(typedMessage));
+            await Run(() => _action?.Invoke(typedMessage));
             return true;
         }
     }
