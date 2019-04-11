@@ -14,7 +14,6 @@ namespace XySoft.CoreMessenger.Subscriptions
             SubscriptionPriority priority, string tag) : base(priority, tag)
         {
             _weakReference = new WeakReference<Action<TMessage>>(action);
-            action = null;
         }
 
         public override async Task<bool> Invoke(object message)

@@ -174,8 +174,9 @@ namespace XySoft.CoreMessenger
                         {
                             Debug.WriteLine($"Failed to remove subscription {subscriptionId}");
                         }
-                    }
+                    
 #endif
+                    }
                 });
 
             }
