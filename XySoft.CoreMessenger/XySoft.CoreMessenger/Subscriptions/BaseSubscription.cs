@@ -10,7 +10,6 @@ namespace XySoft.CoreMessenger.Subscriptions
         public Guid Id { get; private set; }
         public SubscriptionPriority Priority { get; private set; }
         public string Tag { get; private set; }
-        public abstract bool IsAlive { get; }
         public abstract bool Invoke(object message);
         private readonly IDispatcher _dispatcher;
         protected BaseSubscription(IDispatcher dispatcher, SubscriptionPriority priority, string tag)

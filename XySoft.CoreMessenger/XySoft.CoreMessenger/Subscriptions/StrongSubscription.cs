@@ -7,7 +7,6 @@ namespace XySoft.CoreMessenger.Subscriptions
 {
     public class StrongSubscription<TMessage> : BaseSubscription where TMessage : Message
     {
-        public override bool IsAlive => true;
         private readonly Action<TMessage> _action;
 
         public StrongSubscription(IDispatcher dispatcher, Action<TMessage> action,

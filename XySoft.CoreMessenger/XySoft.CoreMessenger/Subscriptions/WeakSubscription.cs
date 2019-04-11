@@ -7,13 +7,13 @@ namespace XySoft.CoreMessenger.Subscriptions
 {
     public class WeakSubscription<TMessage> : BaseSubscription where TMessage : Message
     {
-        private readonly WeakReference _weakReference;
-        public override bool IsAlive => _weakReference.IsAlive;
+        private readonly WeakReference<Action<TMessage>> _weakReference;
 
         public WeakSubscription(IDispatcher dispatcher, Action<TMessage> action,
             SubscriptionPriority priority, string tag) : base(dispatcher, priority, tag)
         {
-            _weakReference = new WeakReference(action);
+            _weakReference = new WeakReference<Action<TMessage>>(action);
+            action = null;
         }
 
         public override bool Invoke(object message)
@@ -23,16 +23,11 @@ namespace XySoft.CoreMessenger.Subscriptions
             {
                 throw new Exception($"Unexpected message {message.ToString()}");
             }
-            if (!_weakReference.IsAlive)
+            if (!_weakReference.TryGetTarget(out Action<TMessage> action))
             {
 #if DEBUG
                 System.Diagnostics.Debug.WriteLine($"Subscription {Id} for {typeof(TMessage)} has been reclaimed by garbage collection");
 #endif
-                return false;
-            }
-            var action = _weakReference.Target as Action<TMessage>;
-            if(action == null)
-            {
                 return false;
             }
             Run(() => action?.Invoke(typedMessage));
