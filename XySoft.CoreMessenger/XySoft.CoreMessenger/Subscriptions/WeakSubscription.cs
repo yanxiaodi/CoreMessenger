@@ -23,7 +23,8 @@ namespace XySoft.CoreMessenger.Subscriptions
             {
                 throw new Exception($"Unexpected message {message.ToString()}");
             }
-            if (!_weakReference.TryGetTarget(out Action<TMessage> action))
+            Action<TMessage> action;
+            if (!_weakReference.TryGetTarget(out action))
             {
 #if DEBUG
                 System.Diagnostics.Debug.WriteLine($"Subscription {Id} for {typeof(TMessage)} has been reclaimed by garbage collection");

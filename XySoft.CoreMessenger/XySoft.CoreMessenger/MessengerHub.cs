@@ -55,7 +55,7 @@ namespace XySoft.CoreMessenger
 #endif
             messageSubscriptions[subscription.Id] = subscription;
             Task.Run(async () => await PublishSubscriberChangedMessage<TMessage>(messageSubscriptions));
-            return new SubscriptionToken(subscription.Id, async () => await UnsubscribeInternal<TMessage>(subscription.Id));
+            return new SubscriptionToken(subscription.Id, async () => await UnsubscribeInternal<TMessage>(subscription.Id), action);
         }
         #endregion
 
@@ -251,18 +251,6 @@ namespace XySoft.CoreMessenger
         #endregion
 
         #region Private methods
-        private IDispatcher BuildDispatcher(ThreadMode threadMode)
-        {
-            switch (threadMode)
-            {
-                case ThreadMode.Current:
-                    return new CurrentThreadDispatcher();
-                case ThreadMode.Background:
-                    return new BackgroundDispatcher();
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(threadMode), "threadMode type unexpected " + threadMode);
-            }
-        }
 
         private BaseSubscription BuildSubscription<TMessage>(Action<TMessage> action, 
             ReferenceType referenceType, 

@@ -38,8 +38,14 @@ namespace XySoft.CoreMessenger.Samples.UwpApp
             tokenA = MessengerHub.Instance.Subscribe<TestMessageA>(OnMessageAReceived, tag: "normal");
             tokenAHighPriority = MessengerHub.Instance.Subscribe<TestMessageA>(OnMessageAHighPriorityReceived, priority: SubscriptionPriority.High, tag: "highPriority");
             Debug.WriteLine($"Subscription for Message A.");
+            tokenB = MessengerHub.Instance.Subscribe<TestMessageB>(OnMessageBReceived);
             var tokenTemp = MessengerHub.Instance.Subscribe<TestMessageA>(OnMessageATempReceived);
 
+        }
+
+        private void OnMessageBReceived(TestMessageB obj)
+        {
+            
         }
 
         private void OnMessageATempReceived(TestMessageA message)
@@ -86,11 +92,14 @@ namespace XySoft.CoreMessenger.Samples.UwpApp
             Debug.WriteLine($"Before GC, there are {MessengerHub.Instance.CountSubscriptionsFor<TestMessageA>()} subscriptions for Message A");
             Debug.WriteLine($"Before GC, there are {MessengerHub.Instance.CountSubscriptionsForTag<TestMessageA>("normal")} subscriptions for Message A with normal priority");
             Debug.WriteLine($"Before GC, there are {MessengerHub.Instance.CountSubscriptionsForTag<TestMessageA>("highPriority")} subscriptions for Message A with high priority");
+            Debug.WriteLine($"Before GC, there are {MessengerHub.Instance.CountSubscriptionsFor<TestMessageB>()} subscriptions for Message B");
 
             GC.Collect();
             Debug.WriteLine($"After GC, there are {MessengerHub.Instance.CountSubscriptionsFor<TestMessageA>()} subscriptions for Message A");
             Debug.WriteLine($"After GC, there are {MessengerHub.Instance.CountSubscriptionsForTag<TestMessageA>("normal")} subscriptions for Message A with normal priority");
             Debug.WriteLine($"After GC, there are {MessengerHub.Instance.CountSubscriptionsForTag<TestMessageA>("highPriority")} subscriptions for Message A with high priority");
+            Debug.WriteLine($"After GC, there are {MessengerHub.Instance.CountSubscriptionsFor<TestMessageB>()} subscriptions for Message B");
+
         }
 
         private void BtnUnscribeByToken_Click(object sender, RoutedEventArgs e)
@@ -98,11 +107,16 @@ namespace XySoft.CoreMessenger.Samples.UwpApp
             Debug.WriteLine($"Before UnscribeByToken, there are {MessengerHub.Instance.CountSubscriptionsFor<TestMessageA>()} subscriptions for Message A");
             Debug.WriteLine($"Before UnscribeByToken, there are {MessengerHub.Instance.CountSubscriptionsForTag<TestMessageA>("normal")} subscriptions for Message A with normal priority");
             Debug.WriteLine($"Before UnscribeByToken, there are {MessengerHub.Instance.CountSubscriptionsForTag<TestMessageA>("highPriority")} subscriptions for Message A with high priority");
+            Debug.WriteLine($"Before UnscribeByToken, there are {MessengerHub.Instance.CountSubscriptionsFor<TestMessageB>()} subscriptions for Message B");
+
             tokenA.Dispose();
             tokenAHighPriority.Dispose();
+            tokenB.Dispose();
             Debug.WriteLine($"After UnscribeByToken, there are {MessengerHub.Instance.CountSubscriptionsFor<TestMessageA>()} subscriptions for Message A");
             Debug.WriteLine($"After UnscribeByToken, there are {MessengerHub.Instance.CountSubscriptionsForTag<TestMessageA>("normal")} subscriptions for Message A with normal priority");
             Debug.WriteLine($"After UnscribeByToken, there are {MessengerHub.Instance.CountSubscriptionsForTag<TestMessageA>("highPriority")} subscriptions for Message A with high priority");
+            Debug.WriteLine($"After UnscribeByToken, there are {MessengerHub.Instance.CountSubscriptionsFor<TestMessageB>()} subscriptions for Message B");
+
         }
 
         private async void BtnPerformanceTest_Click(object sender, RoutedEventArgs e)
@@ -110,7 +124,7 @@ namespace XySoft.CoreMessenger.Samples.UwpApp
             var sw = Stopwatch.StartNew();
             for (int i = 0; i < 1000; i++)
             {
-                await MessengerHub.Instance.Publish(new TestMessageA(this, $"Hello World! {i.ToString()}"));
+                await MessengerHub.Instance.Publish(new TestMessageB(this, 100, 100));
             }
             sw.Stop();
             this.txtMessage.Text = $"Publish completed: {sw.Elapsed}";

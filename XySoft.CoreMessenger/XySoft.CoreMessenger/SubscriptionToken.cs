@@ -8,11 +8,13 @@ namespace XySoft.CoreMessenger
     {
         public Guid Id { get; private set; }
         private readonly Action _disposeMe;
+        private readonly object _dependentObject;
 
-        public SubscriptionToken(Guid id, Action disposeMe)
+        public SubscriptionToken(Guid id, Action disposeMe, object dependentObject)
         {
             Id = id;
             _disposeMe = disposeMe;
+            _dependentObject = dependentObject;
         }
 
         public void Dispose()

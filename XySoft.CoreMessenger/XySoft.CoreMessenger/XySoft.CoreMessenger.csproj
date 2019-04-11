@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>XySoft.CoreMessenger</PackageId>
-    <Version>0.1.1</Version>
+    <Version>0.1.2</Version>
     <Authors>Xiaodi Yan</Authors>
     <Company>XySoft</Company>
     <PackageDescription>A simple messenger system that you can use in UWP, WPF and Xamarin to communicate between different components or pages. It comes from MvvmCross.Messenger.</PackageDescription>
@@ -11,7 +11,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>A simple messenger system that you can use in UWP, WPF and Xamarin to communicate between different components or pages. It comes from MvvmCross.Messenger.</Description>
     <Copyright>XySoft@2019</Copyright>
-    <AssemblyVersion>0.1.1.0</AssemblyVersion>
+    <AssemblyVersion>0.1.2.0</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="readme.txt">
