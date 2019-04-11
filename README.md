@@ -6,10 +6,10 @@ This project comes from MvvmCross.Messenger and now it can be used in all the WP
 
 ## Usage
 
-Use `MessengerHub.Instance` as the singlton patter in your whole app domain. It provides these methods:
+Use `MessengerHub.Instance` as the singleton patter in your whole app domain. It provides these methods:
 
 * Publish: `public async Task Publish<TMessage>(TMessage message)`
-* Subsubscribe: `public SubscriptionToken Subscribe<TMessage>(Action<TMessage> action, ReferenceType referenceType = ReferenceType.Weak, SubscriptionPriority priority = SubscriptionPriority.Normal, string tag = null)`
+* Subscribe: `public SubscriptionToken Subscribe<TMessage>(Action<TMessage> action, ReferenceType referenceType = ReferenceType.Weak, SubscriptionPriority priority = SubscriptionPriority.Normal, string tag = null)`
 * Unsubscribe: `public async Task Unsubscribe<TMessage>(SubscriptionToken subscriptionToken)`
 
 ### Creating the `Message` class
@@ -27,7 +27,7 @@ public class TestMessage : Message
 }
 ```
 
-Then create a instance of the `Message` in your component A, as shown below:
+Then create an instance of the `Message` in your component A, as shown below:
 
 ```csharp
 var message = new TestMessageA(this, "Test Content");
@@ -115,7 +115,7 @@ public void MayNotEverReceiveAMessage()
 
 ## Differences with MvvmCross.Messenger
 
-If you are using `MvvmCross` to develop your application, please use `MvvmCross.Messenger` directly. I extracted some main methods and removed dependencies to `MvvmCross` components so it can be used in any WPF, UWP and Xamarin projects without `MvvmCross`. Also the `Publish` method is always running in background to avoid blocking the UI.
+If you are using `MvvmCross` to develop your application, please use `MvvmCross.Messenger` directly. I extracted some main methods and removed dependencies to `MvvmCross` components so it can be used in any WPF, UWP and Xamarin projects without `MvvmCross`. Also the `Publish` method is always running in background to avoid blocking the UI. Another difference is that no need to use DI to create the instance of `MessageHub` which is a singleton instance in all the app domain. It is useful if the solution contains multiple components that need communicate with each other. DI would make it more complicated.
 
 ## Thanks
 
