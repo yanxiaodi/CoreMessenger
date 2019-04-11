@@ -1,0 +1,20 @@
+﻿<Page
+    x:Class="XySoft.CoreMessenger.Samples.UwpApp.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:XySoft.CoreMessenger.Samples.UwpApp"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+        <StackPanel Orientation="Vertical" Margin="30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <TextBlock x:Name="txtMessage" />
+        <Button Content="Subscribe" Width="500" x:Name="btnSubscribe" Click="BtnSubscribe_Click"/>
+        <Button Content="Unsubscribe By MessengerHub" Width="500" x:Name="btnUnsubscribe" Click="BtnUnsubscribe_Click"/>
+        <Button Content="Unsubscribe By SubscribeToken" Width="500" x:Name="btnUnscribeByToken" Click="BtnUnscribeByToken_Click"/>
+        <Button Content="Publish" Width="500" x:Name="btnPublish" Click="BtnPublish_Click"/>
+        <Button Content="Performance Test" Width="500" x:Name="btnPerformanceTest" Click="BtnPerformanceTest_Click"/>
+        <Button Content="GC" Width="500" x:Name="btnGC" Click="BtnGC_Click"/>
+    </StackPanel>
+</Page>
