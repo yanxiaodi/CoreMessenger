@@ -54,8 +54,8 @@ namespace XySoft.CoreMessenger
             Debug.WriteLine($"Adding subscription {subscription.Id} for {typeof(TMessage).Name}");
 #endif
             messageSubscriptions[subscription.Id] = subscription;
-            Task.Run(async() => await PublishSubscriberChangedMessage<TMessage>(messageSubscriptions));
-            return new SubscriptionToken(subscription.Id, async() => await UnsubscribeInternal<TMessage>(subscription.Id));
+            Task.Run(async () => await PublishSubscriberChangedMessage<TMessage>(messageSubscriptions));
+            return new SubscriptionToken(subscription.Id, async () => await UnsubscribeInternal<TMessage>(subscription.Id));
         }
         #endregion
 
@@ -145,8 +145,8 @@ namespace XySoft.CoreMessenger
                     deadSubscriptionIds.Add(subscription.Id);
                 }
             }
-            
-            if(deadSubscriptionIds.Any())
+
+            if (deadSubscriptionIds.Any())
             {
                 await PurgeDeadSubscriptions(messageType, deadSubscriptionIds);
             }
@@ -182,7 +182,7 @@ namespace XySoft.CoreMessenger
             await PublishSubscriberChangedMessage(messageType, messageSubscriptions);
         }
 
-        private async Task PublishSubscriberChangedMessage<TMessage>(ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions) 
+        private async Task PublishSubscriberChangedMessage<TMessage>(ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions)
             where TMessage : Message
         {
 
@@ -195,6 +195,58 @@ namespace XySoft.CoreMessenger
             await Publish(new SubscriberChangedMessage(this, messageType, newCount));
         }
 
+        #endregion
+
+        #region Helper Methods
+        public bool HasSubscriptionsFor<TMessage>() where TMessage : Message
+        {
+            ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions;
+            if (!_subscriptions.TryGetValue(typeof(TMessage), out messageSubscriptions))
+            {
+                return false;
+            }
+            return messageSubscriptions.Any();
+        }
+
+        public int CountSubscriptionsFor<TMessage>() where TMessage : Message
+        {
+            ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions;
+            if (!_subscriptions.TryGetValue(typeof(TMessage), out messageSubscriptions))
+            {
+                return 0;
+            }
+            return messageSubscriptions.Count;
+        }
+
+        public bool HasSubscriptionsForTag<TMessage>(string tag) where TMessage : Message
+        {
+            ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions;
+            if (!_subscriptions.TryGetValue(typeof(TMessage), out messageSubscriptions))
+            {
+                return false;
+            }
+            return messageSubscriptions.Any(x => x.Value.Tag == tag);
+        }
+
+        public int CountSubscriptionsForTag<TMessage>(string tag) where TMessage : Message
+        {
+            ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions;
+            if (!_subscriptions.TryGetValue(typeof(TMessage), out messageSubscriptions))
+            {
+                return 0;
+            }
+            return messageSubscriptions.Count(x => x.Value.Tag == tag);
+        }
+
+        public IList<string> GetSubscriptionTagsFor<TMessage>() where TMessage : Message
+        {
+            ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions;
+            if (!_subscriptions.TryGetValue(typeof(TMessage), out messageSubscriptions))
+            {
+                return new List<string>(0);
+            }
+            return messageSubscriptions.Select(x => x.Value.Tag).ToList();
+        }
         #endregion
 
         #region Private methods
