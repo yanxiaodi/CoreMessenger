@@ -45,7 +45,6 @@ namespace XySoft.CoreMessenger.Samples.UwpApp
 
         private void OnMessageBReceived(TestMessageB obj)
         {
-            
         }
 
         private void OnMessageATempReceived(TestMessageA message)

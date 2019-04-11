@@ -151,6 +151,27 @@ namespace XySoft.CoreMessenger
             }
         }
 
+        
+
+        
+
+        private async Task PublishSubscriberChangedMessage<TMessage>(ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions)
+            where TMessage : Message
+        {
+
+            await PublishSubscriberChangedMessage(typeof(TMessage), messageSubscriptions);
+        }
+
+        private async Task PublishSubscriberChangedMessage(Type messageType, ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions)
+        {
+            var newCount = messageSubscriptions?.Count ?? 0;
+            await Publish(new SubscriberChangedMessage(this, messageType, newCount));
+        }
+
+        #endregion
+
+        #region Purge dead subscriptions
+
         private async Task PurgeDeadSubscriptions(Type messageType, List<Guid> deadSubscriptionIds)
         {
             ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions = null;
@@ -181,20 +202,6 @@ namespace XySoft.CoreMessenger
             }
             await PublishSubscriberChangedMessage(messageType, messageSubscriptions);
         }
-
-        private async Task PublishSubscriberChangedMessage<TMessage>(ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions)
-            where TMessage : Message
-        {
-
-            await PublishSubscriberChangedMessage(typeof(TMessage), messageSubscriptions);
-        }
-
-        private async Task PublishSubscriberChangedMessage(Type messageType, ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions)
-        {
-            var newCount = messageSubscriptions?.Count ?? 0;
-            await Publish(new SubscriberChangedMessage(this, messageType, newCount));
-        }
-
         #endregion
 
         #region Helper Methods
