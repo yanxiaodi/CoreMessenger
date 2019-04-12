@@ -6,6 +6,10 @@ This project comes from MvvmCross.Messenger and now it can be used in all the WP
 
 ## Usage
 
+Install from Nuget:
+
+```PM> Install-Package XySoft.CoreMessenger```
+
 Use `MessengerHub.Instance` as the singleton pattern in your whole app domain. It provides these methods:
 
 * Publish: `public async Task Publish<TMessage>(TMessage message)`
