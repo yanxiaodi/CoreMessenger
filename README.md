@@ -34,7 +34,7 @@ public class TestMessage : Message
 Then create an instance of the `Message` in your component A, as shown below:
 
 ```csharp
-var message = new TestMessageA(this, "Test Content");
+var message = new TestMessage(this, "Test Content");
 ```
 
 ### Subscription
@@ -48,7 +48,7 @@ public class HomeViewModel
         public HomeViewModel()
         {
             _subscriptionTokenForTestMessage = 
-                MessengerHub.Instance.Subscribe<TestMessageA>(OnTestMessageReceived,
+                MessengerHub.Instance.Subscribe<TestMessage>(OnTestMessageReceived,
                 ReferenceType.Weak, SubscriptionPriority.Normal);
         }
 
