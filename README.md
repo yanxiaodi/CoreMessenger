@@ -20,8 +20,11 @@ public async Task Publish<TMessage>(TMessage message)
 ```
 * Subscribe: 
 ```
-public SubscriptionToken Subscribe<TMessage>(Action<TMessage> action, ReferenceType referenceType = ReferenceType.Weak, SubscriptionPriority priority = SubscriptionPriority.Normal, string tag = null)`
-* Unsubscribe: `public async Task Unsubscribe<TMessage>(SubscriptionToken subscriptionToken)
+public SubscriptionToken Subscribe<TMessage>(Action<TMessage> action, ReferenceType referenceType = ReferenceType.Weak, SubscriptionPriority priority = SubscriptionPriority.Normal, string tag = null)
+```
+* Unsubscribe:
+```
+public async Task Unsubscribe<TMessage>(SubscriptionToken subscriptionToken)
 ```
 
 ### Creating the `Message` class
