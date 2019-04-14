@@ -15,15 +15,15 @@ PM> Install-Package XySoft.CoreMessenger
 Use `MessengerHub.Instance` as the singleton pattern in your whole app domain. It provides these methods:
 
 * Publish: 
-```
+```csharp
 public async Task Publish<TMessage>(TMessage message)
 ```
 * Subscribe: 
-```
+```csharp
 public SubscriptionToken Subscribe<TMessage>(Action<TMessage> action, ReferenceType referenceType = ReferenceType.Weak, SubscriptionPriority priority = SubscriptionPriority.Normal, string tag = null)
 ```
 * Unsubscribe:
-```
+```csharp
 public async Task Unsubscribe<TMessage>(SubscriptionToken subscriptionToken)
 ```
 
