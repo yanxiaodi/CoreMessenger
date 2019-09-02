@@ -130,7 +130,7 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="XySoft.CoreMessenger.Samples.UwpApp_TemporaryKey.pfx" />
+    <None Include="FunCoding.CoreMessenger.Samples.UwpApp_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\Default.rd.xml" />
@@ -158,9 +158,9 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\XySoft.CoreMessenger\XySoft.CoreMessenger.csproj">
-      <Project>{cb8d26f1-765d-4aef-a1b6-ab6bae63dbb9}</Project>
-      <Name>XySoft.CoreMessenger</Name>
+    <ProjectReference Include="..\..\FunCoding.CoreMessenger\FunCoding.CoreMessenger.csproj">
+      <Project>{12d0223c-15d3-4e4c-939f-7516c3bfa309}</Project>
+      <Name>FunCoding.CoreMessenger</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

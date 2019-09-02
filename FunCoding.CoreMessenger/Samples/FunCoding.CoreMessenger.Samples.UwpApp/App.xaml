@@ -1,7 +1,7 @@
 ﻿<Application
-    x:Class="XySoft.CoreMessenger.Samples.UwpApp.App"
+    x:Class="FunCoding.CoreMessenger.Samples.UwpApp.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:XySoft.CoreMessenger.Samples.UwpApp">
+    xmlns:local="using:FunCoding.CoreMessenger.Samples.UwpApp">
 
 </Application>

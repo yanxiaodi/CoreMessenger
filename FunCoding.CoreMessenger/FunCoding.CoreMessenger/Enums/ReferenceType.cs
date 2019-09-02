@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace XySoft.CoreMessenger
+namespace FunCoding.CoreMessenger
 {
     /// <summary>
     /// The reference type of the subscription. Weak is recommended.

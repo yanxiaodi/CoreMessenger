@@ -5,9 +5,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XySoft.CoreMessenger.Subscriptions;
+using FunCoding.CoreMessenger.Subscriptions;
 
-namespace XySoft.CoreMessenger
+namespace FunCoding.CoreMessenger
 {
     /// <summary>
     /// MessageHub for publishing / subscribing messages. You should use the singelton instance of this class in the whole app domain.

@@ -2,15 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <PackageId>XySoft.CoreMessenger</PackageId>
+    <PackageId>FunCoding.CoreMessenger</PackageId>
     <Version>0.1.3</Version>
     <Authors>Xiaodi Yan</Authors>
-    <Company>XySoft</Company>
+    <Company>FunCoding</Company>
     <PackageDescription>A simple messenger system that you can use in UWP, WPF and Xamarin to communicate between different components or pages. It comes from MvvmCross.Messenger.</PackageDescription>
     <PackageReleaseNotes>The first version.</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>A simple messenger system that you can use in UWP, WPF and Xamarin to communicate between different components or pages. It comes from MvvmCross.Messenger.</Description>
-    <Copyright>XySoft@2019</Copyright>
+    <Copyright>FunCoding@2019</Copyright>
     <RepositoryUrl>https://github.com/yanxiaodi/CoreMessenger</RepositoryUrl>
     <AssemblyVersion>0.1.3.0</AssemblyVersion>
   </PropertyGroup>

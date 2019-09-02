@@ -14,7 +14,7 @@
   <mp:PhoneIdentity PhoneProductId="40e86bec-1ace-4045-9027-428af0f472ac" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>XySoft.CoreMessenger.Samples.UwpApp</DisplayName>
+    <DisplayName>FunCoding.CoreMessenger.Samples.UwpApp</DisplayName>
     <PublisherDisplayName>XiaodiY</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -30,12 +30,12 @@
   <Applications>
     <Application Id="App"
       Executable="$targetnametoken$.exe"
-      EntryPoint="XySoft.CoreMessenger.Samples.UwpApp.App">
+      EntryPoint="FunCoding.CoreMessenger.Samples.UwpApp.App">
       <uap:VisualElements
-        DisplayName="XySoft.CoreMessenger.Samples.UwpApp"
+        DisplayName="FunCoding.CoreMessenger.Samples.UwpApp"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png"
-        Description="XySoft.CoreMessenger.Samples.UwpApp"
+        Description="FunCoding.CoreMessenger.Samples.UwpApp"
         BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png"/>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />

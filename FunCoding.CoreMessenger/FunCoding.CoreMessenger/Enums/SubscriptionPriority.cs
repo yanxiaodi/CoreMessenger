@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace XySoft.CoreMessenger
+namespace FunCoding.CoreMessenger
 {
     /// <summary>
     /// The priority of subscription. For the same message, all the subscriptions will be invoked according to the priority orders.

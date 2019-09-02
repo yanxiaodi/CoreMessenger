@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace XySoft.CoreMessenger.Subscriptions
+namespace FunCoding.CoreMessenger.Subscriptions
 {
     public class StrongSubscription<TMessage> : BaseSubscription where TMessage : Message
     {

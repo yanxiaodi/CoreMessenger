@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("XySoft.CoreMessenger.Samples.UwpApp")]
+[assembly: AssemblyTitle("FunCoding.CoreMessenger.Samples.UwpApp")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("XySoft.CoreMessenger.Samples.UwpApp")]
+[assembly: AssemblyProduct("FunCoding.CoreMessenger.Samples.UwpApp")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

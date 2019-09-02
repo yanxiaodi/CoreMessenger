@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XySoft.CoreMessenger.Samples.UwpApp
+namespace FunCoding.CoreMessenger.Samples.UwpApp
 {
     public class TestMessageA : Message
     {

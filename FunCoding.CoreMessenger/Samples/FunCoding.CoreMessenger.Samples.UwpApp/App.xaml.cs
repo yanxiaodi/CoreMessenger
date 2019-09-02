@@ -15,7 +15,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-namespace XySoft.CoreMessenger.Samples.UwpApp
+namespace FunCoding.CoreMessenger.Samples.UwpApp
 {
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
