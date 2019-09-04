@@ -7,9 +7,9 @@ namespace FunCoding.CoreMessenger
 {
     public class Dispatcher
     {
-        public async Task Invoke(Action action)
+        public Task Invoke(Action action)
         {
-            await Task.Run(action);
+            return Task.Run(action);
         }
     }
 }

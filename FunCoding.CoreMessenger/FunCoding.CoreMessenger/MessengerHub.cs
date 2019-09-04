@@ -149,11 +149,7 @@ namespace FunCoding.CoreMessenger
             {
                 await PurgeDeadSubscriptions(messageType, deadSubscriptionIds);
             }
-        }
-
-        
-
-        
+        }     
 
         private async Task PublishSubscriberChangedMessage<TMessage>(ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions)
             where TMessage : Message
