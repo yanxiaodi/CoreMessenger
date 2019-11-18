@@ -23,10 +23,3 @@ steps:
   inputs:
     packageType: 'sdk'
     version: '2.x'
-
-- task: DotNetCoreCLI@2
-  displayName: DotNetCore Restore
-  inputs:
-    command: 'restore'
-    projects: 'FunCoding.CoreMessenger.csproj'
-    feedsToUse: 'select'
