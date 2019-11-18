@@ -6,25 +6,27 @@
 trigger:
 - master
 
+pr:
+- master
+
 pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: '**/*.sln'
+  Projects: 'FunCoding.CoreMessenger.csproj'
   buildPlatform: 'x86|x64|ARM'
   buildConfiguration: 'Release'
-  appxPackageDir: '$(build.artifactStagingDirectory)\AppxPackages\\'
 
 steps:
-- task: NuGetToolInstaller@1
-
-- task: NuGetCommand@2
+- task: UseDotNet@2
+  displayName: 'Install .NET Core SDK'
   inputs:
-    restoreSolution: '$(solution)'
+    packageType: 'sdk'
+    version: '2.2'
 
-- task: VSBuild@1
+- task: DotNetCoreCLI@2
+  displayName: DotNetCore Restore
   inputs:
-    platform: 'x86'
-    solution: '$(solution)'
-    configuration: '$(buildConfiguration)'
-    msbuildArgs: '/p:AppxBundlePlatforms="$(buildPlatform)" /p:AppxPackageDir="$(appxPackageDir)" /p:AppxBundle=Always /p:UapAppxPackageBuildMode=StoreUpload'
+    command: 'restore'
+    projects: 'FunCoding.CoreMessenger.csproj'
+    feedsToUse: 'select'
