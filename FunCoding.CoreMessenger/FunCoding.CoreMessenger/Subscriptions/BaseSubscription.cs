@@ -9,20 +9,11 @@ namespace FunCoding.CoreMessenger.Subscriptions
         public SubscriptionPriority Priority { get; private set; }
         public string Tag { get; private set; }
         public abstract Task<bool> Invoke(object message);
-        private readonly Dispatcher _dispatcher;
         protected BaseSubscription(SubscriptionPriority priority, string tag)
         {
-            _dispatcher = new Dispatcher();
             Id = Guid.NewGuid();
             Priority = priority;
             Tag = tag;
         }
-
-        protected async Task Run(Action action)
-        {
-            await _dispatcher.Invoke(action);
-        }
-
-
     }
 }

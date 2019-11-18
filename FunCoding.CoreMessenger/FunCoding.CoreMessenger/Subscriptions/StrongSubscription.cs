@@ -19,7 +19,7 @@ namespace FunCoding.CoreMessenger.Subscriptions
             {
                 throw new Exception($"Unexpected message {message.ToString()}");
             }
-            await Run(() => _action?.Invoke(typedMessage));
+            await Task.Run(() => _action?.Invoke(typedMessage));
             return true;
         }
     }

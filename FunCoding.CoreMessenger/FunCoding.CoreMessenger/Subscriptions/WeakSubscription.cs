@@ -28,7 +28,7 @@ namespace FunCoding.CoreMessenger.Subscriptions
 #endif
                 return false;
             }
-            await Run(() => action?.Invoke(typedMessage));
+            await Task.Run(() => action?.Invoke(typedMessage));
             return true;
         }
     }
