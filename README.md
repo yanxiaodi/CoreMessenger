@@ -98,7 +98,7 @@ public SubscriptionToken Subscribe<TMessage>(Action<TMessage> action,
 You can specify these parameters:
 
 * `ReferenceType`. The default value is `ReferenceType.Weak` so you do not need to worry about the memory leaking. Once the `SubscriptionToken` instance goes out of the scope, GC can collect it automatically(But not sure when). If you need to keep a strong reference, specify the parameter as `ReferenceType.Strong` so that GC cannot collect it.
-* `SubscriptionPriority`. The default value is `SubscriptionPriority.Normal`. Sometimes it is required to control the excution orders of the subscriptions for one `Message`. In this case, specify different priorities for the subscriptions to control the excution orders. Notice that this parameter is not for different `Message`s.
+* `SubscriptionPriority`. The default value is `SubscriptionPriority.Normal`. Sometimes it is required to control the execution orders of the subscriptions for one `Message`. In this case, specify different priorities for the subscriptions to control the execution orders. Notice that this parameter is not for different `Message`s.
 * `Tag`. It is optional to inspect current status for subscriptions.
 
 ### Unsubscribe

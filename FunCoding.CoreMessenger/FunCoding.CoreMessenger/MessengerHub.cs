@@ -43,8 +43,7 @@ namespace FunCoding.CoreMessenger
         private SubscriptionToken SubscribeInternal<TMessage>(Action<TMessage> action, BaseSubscription subscription)
             where TMessage : Message
         {
-            ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions;
-            if (!_subscriptions.TryGetValue(typeof(TMessage), out messageSubscriptions))
+            if (!_subscriptions.TryGetValue(typeof(TMessage), out var messageSubscriptions))
             {
                 messageSubscriptions = new ConcurrentDictionary<Guid, BaseSubscription>();
                 _subscriptions[typeof(TMessage)] = messageSubscriptions;
@@ -66,9 +65,7 @@ namespace FunCoding.CoreMessenger
 
         private async Task UnsubscribeInternal<TMessage>(Guid subscriptionId) where TMessage : Message
         {
-            ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions;
-
-            if (_subscriptions.TryGetValue(typeof(TMessage), out messageSubscriptions))
+            if (_subscriptions.TryGetValue(typeof(TMessage), out var messageSubscriptions))
             {
                 if (messageSubscriptions.ContainsKey(subscriptionId))
                 {
@@ -115,8 +112,7 @@ namespace FunCoding.CoreMessenger
                 Debug.WriteLine($"Found subscriptions for {t.Name}");
             }
 #endif
-            ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions = null;
-            if (_subscriptions.TryGetValue(messageType, out messageSubscriptions))
+            if (_subscriptions.TryGetValue(messageType, out var messageSubscriptions))
             {
 #if DEBUG
                 Debug.WriteLine($"Found {messageSubscriptions.Values.Count} messages of type {typeof(TMessage).Name}");
@@ -170,8 +166,7 @@ namespace FunCoding.CoreMessenger
 
         private async Task PurgeDeadSubscriptions(Type messageType, List<Guid> deadSubscriptionIds)
         {
-            ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions = null;
-            if (_subscriptions.TryGetValue(messageType, out messageSubscriptions))
+            if (_subscriptions.TryGetValue(messageType, out var messageSubscriptions))
             {
                 deadSubscriptionIds.ForEach(subscriptionId =>
                 {
@@ -203,8 +198,7 @@ namespace FunCoding.CoreMessenger
         #region Helper Methods
         public bool HasSubscriptionsFor<TMessage>() where TMessage : Message
         {
-            ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions;
-            if (!_subscriptions.TryGetValue(typeof(TMessage), out messageSubscriptions))
+            if (!_subscriptions.TryGetValue(typeof(TMessage), out var messageSubscriptions))
             {
                 return false;
             }
@@ -213,8 +207,7 @@ namespace FunCoding.CoreMessenger
 
         public int CountSubscriptionsFor<TMessage>() where TMessage : Message
         {
-            ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions;
-            if (!_subscriptions.TryGetValue(typeof(TMessage), out messageSubscriptions))
+            if (!_subscriptions.TryGetValue(typeof(TMessage), out var messageSubscriptions))
             {
                 return 0;
             }
@@ -223,8 +216,7 @@ namespace FunCoding.CoreMessenger
 
         public bool HasSubscriptionsForTag<TMessage>(string tag) where TMessage : Message
         {
-            ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions;
-            if (!_subscriptions.TryGetValue(typeof(TMessage), out messageSubscriptions))
+            if (!_subscriptions.TryGetValue(typeof(TMessage), out var messageSubscriptions))
             {
                 return false;
             }
@@ -233,8 +225,7 @@ namespace FunCoding.CoreMessenger
 
         public int CountSubscriptionsForTag<TMessage>(string tag) where TMessage : Message
         {
-            ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions;
-            if (!_subscriptions.TryGetValue(typeof(TMessage), out messageSubscriptions))
+            if (!_subscriptions.TryGetValue(typeof(TMessage), out var messageSubscriptions))
             {
                 return 0;
             }
@@ -243,8 +234,7 @@ namespace FunCoding.CoreMessenger
 
         public IList<string> GetSubscriptionTagsFor<TMessage>() where TMessage : Message
         {
-            ConcurrentDictionary<Guid, BaseSubscription> messageSubscriptions;
-            if (!_subscriptions.TryGetValue(typeof(TMessage), out messageSubscriptions))
+            if (!_subscriptions.TryGetValue(typeof(TMessage), out var messageSubscriptions))
             {
                 return new List<string>(0);
             }
