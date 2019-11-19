@@ -87,7 +87,7 @@ All done!
 
 ### Parameters
 
-The full singnature of the `Subscribe` method is:
+The full signature of the `Subscribe` method is:
 
 ```csharp
 public SubscriptionToken Subscribe<TMessage>(Action<TMessage> action,
