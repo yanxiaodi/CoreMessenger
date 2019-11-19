@@ -131,6 +131,12 @@ public void MayNotEverReceiveAMessage()
 ## Differences with MvvmCross.Messenger
 
 If you are using `MvvmCross` to develop your application, please use `MvvmCross.Messenger` directly. I extracted some main methods and removed dependencies to `MvvmCross` components so it can be used in any WPF, UWP and Xamarin projects without `MvvmCross`. Also, the `Publish` method is always running in the background to avoid blocking the UI. But you should be aware of when you need to return to UI thread - especially when you need to interact with the UI controls. Another difference is that no need to use DI to create the instance of `MessageHub` which is a singleton instance in all the app domain. It is useful if the solution contains multiple components that need to communicate with each other. DI would make it more complicated.
+
+## Licensing
+
+FunCoding.CoreMessenger is licensed under [MIT License](https://github.com/yanxiaodi/CoreMessenger/blob/master/LICENSE).
+* The idea comes from [MvvmCross](https://www.mvvmcross.com/) Messenger component under MS-PL License, [JonathanPeppers/XPlatUtils](https://github.com/jonathanpeppers/XPlatUtils) under Apache License Version 2.0, and from GrumpyDev/TinyMessenger under simple license of "THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY"
+
 ## Thanks
 
 * [MvvmCross](https://www.mvvmcross.com)
