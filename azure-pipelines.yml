@@ -31,13 +31,10 @@ steps:
   displayName: 'Pack the package'
   inputs:
     command: 'pack'
-    configuration: $(configuration)
-    packagesToPack: $(projectPath)
+    packagesToPack: '$(projectPath)'
+    configuration: '$(configuration)'
     nobuild: true
-    versioningScheme: 'byPrereleaseNumber'
-    majorVersion: '1'
-    minorVersion: '0'
-    patchVersion: '0'
+    versioningScheme: 'byBuildNumber'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish the package'
