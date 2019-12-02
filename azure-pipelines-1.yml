@@ -9,6 +9,10 @@ trigger:
 pool:
   vmImage: 'windows-2019'
 
+variables:
+  configuration: 'Release'
+  projectPath: 'FunCoding.CoreMessenger/FunCoding.CoreMessenger/FunCoding.CoreMessenger.csproj'
+
 steps:
 - task: UseDotNet@2
   displayName: 'Install .NET Core SDK'
@@ -20,14 +24,14 @@ steps:
   displayName: 'Build the project'
   inputs:
     command: 'build'
-    configuration: 'Release'
-    projects: 'FunCoding.CoreMessenger/FunCoding.CoreMessenger/FunCoding.CoreMessenger.csproj'
+    configuration: $(configuration)
+    projects: $(projectPath)
 
 - task: DotNetCoreCLI@2
   displayName: 'Pack the package'
   inputs:
     command: 'pack'
-    packagesToPack: 'FunCoding.CoreMessenger/FunCoding.CoreMessenger/FunCoding.CoreMessenger.csproj'
+    packagesToPack: $(projectPath)
     nobuild: true
     versioningScheme: 'byPrereleaseNumber'
     majorVersion: '1'
