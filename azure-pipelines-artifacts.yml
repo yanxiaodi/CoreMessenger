@@ -26,6 +26,7 @@ steps:
     version: '2.x'
 
 - task: DotNetCoreCLI@2
+  displayName: 'Build the project'
   inputs:
     command: 'build'
     configuration: $(buildConfiguration)
