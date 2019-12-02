@@ -1,22 +1,17 @@
-# Universal Windows Platform
-# Build a Universal Windows Platform project using Visual Studio.
-# Add steps that test and distribute an app, save build artifacts, and more:
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
 trigger:
 - master
 
-pr:
-- master
-
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'windows-2019'
 
 variables:
-  Projects: 'FunCoding.CoreMessenger.csproj'
+  configuration: 'Release'
   projectPath: 'FunCoding.CoreMessenger/FunCoding.CoreMessenger/FunCoding.CoreMessenger.csproj'
-  buildPlatform: 'x86|x64|ARM'
-  buildConfiguration: Release
 
 steps:
 - task: UseDotNet@2
@@ -29,15 +24,14 @@ steps:
   displayName: 'Build the project'
   inputs:
     command: 'build'
-    configuration: Release
+    configuration: $(configuration)
     projects: $(projectPath)
-
 
 - task: DotNetCoreCLI@2
   displayName: 'Pack the package'
   inputs:
     command: 'pack'
-    configuration: $(buildConfiguration)
+    configuration: $(configuration)
     packagesToPack: $(projectPath)
     nobuild: true
     versioningScheme: 'byPrereleaseNumber'
@@ -45,10 +39,11 @@ steps:
     minorVersion: '0'
     patchVersion: '0'
 
-
 - task: PublishBuildArtifacts@1
   displayName: 'Publish the package'
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
+
+    
