@@ -31,6 +31,7 @@ steps:
   displayName: 'Pack the package'
   inputs:
     command: 'pack'
+    configuration: $(configuration)
     packagesToPack: $(projectPath)
     nobuild: true
     versioningScheme: 'byPrereleaseNumber'
@@ -38,5 +39,10 @@ steps:
     minorVersion: '0'
     patchVersion: '0'
 
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
 
     
