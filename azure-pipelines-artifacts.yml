@@ -1,0 +1,25 @@
+# Universal Windows Platform
+# Build a Universal Windows Platform project using Visual Studio.
+# Add steps that test and distribute an app, save build artifacts, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pr:
+- master
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  Projects: 'FunCoding.CoreMessenger.csproj'
+  buildPlatform: 'x86|x64|ARM'
+  buildConfiguration: 'Release'
+
+steps:
+- task: UseDotNet@2
+  displayName: 'Install .NET Core SDK'
+  inputs:
+    packageType: 'sdk'
+    version: '2.x'
