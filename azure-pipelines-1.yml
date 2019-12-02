@@ -17,7 +17,22 @@ steps:
     version: '2.x'
 
 - task: DotNetCoreCLI@2
+  displayName: 'Build the project'
   inputs:
     command: 'build'
     configuration: 'Release'
     projects: 'FunCoding.CoreMessenger/FunCoding.CoreMessenger/FunCoding.CoreMessenger.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Pack the package'
+  inputs:
+    command: 'pack'
+    packagesToPack: 'FunCoding.CoreMessenger/FunCoding.CoreMessenger/FunCoding.CoreMessenger.csproj'
+    nobuild: true
+    versioningScheme: 'byPrereleaseNumber'
+    majorVersion: '1'
+    minorVersion: '0'
+    patchVersion: '0'
+
+
+    
