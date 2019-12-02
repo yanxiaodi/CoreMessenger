@@ -16,7 +16,7 @@ variables:
   Projects: 'FunCoding.CoreMessenger.csproj'
   projectPath: 'FunCoding.CoreMessenger/FunCoding.CoreMessenger/FunCoding.CoreMessenger.csproj'
   buildPlatform: 'x86|x64|ARM'
-  buildConfiguration: 'Release'
+  buildConfiguration: Release
 
 steps:
 - task: UseDotNet@2
@@ -29,7 +29,7 @@ steps:
   displayName: 'Build the project'
   inputs:
     command: 'build'
-    configuration: 'Release'
+    configuration: Release
     projects: $(projectPath)
 
 
