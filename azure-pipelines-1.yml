@@ -40,6 +40,7 @@ steps:
     patchVersion: '0'
 
 - task: PublishBuildArtifacts@1
+  displayName: 'Publish the package'
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
