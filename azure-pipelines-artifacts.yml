@@ -29,7 +29,7 @@ steps:
   displayName: 'Build the project'
   inputs:
     command: 'build'
-    configuration: $(buildConfiguration)
+    configuration: 'Release'
     projects: $(projectPath)
 
 
