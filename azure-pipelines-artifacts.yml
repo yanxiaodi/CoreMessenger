@@ -14,6 +14,7 @@ pool:
 
 variables:
   Projects: 'FunCoding.CoreMessenger.csproj'
+  projectPath: 'FunCoding.CoreMessenger/FunCoding.CoreMessenger/FunCoding.CoreMessenger.csproj'
   buildPlatform: 'x86|x64|ARM'
   buildConfiguration: 'Release'
 
@@ -28,4 +29,4 @@ steps:
   inputs:
     command: 'build'
     configuration: $(buildConfiguration)
-    projects: $(Projects)
+    projects: $(projectPath)
